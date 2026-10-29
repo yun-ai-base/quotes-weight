@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>209 条之后 · 语录的重量</title>
+<style>
+:root{
+  --paper:#f6f2ea;
+  --paper2:#fffdf8;
+  --ink:#17150f;
+  --ink2:#4a453c;
+  --muted:#8a8071;
+  --line:rgba(23,21,15,.13);
+  --line2:rgba(23,21,15,.07);
+  --accent:#9c3d26;
+  --accent-soft:rgba(156,61,38,.07);
+  --teal:#2b5f56;
+  --teal-soft:rgba(43,95,86,.07);
+  --gold:#a8832f;
+  --serif:"Songti SC","Noto Serif SC","Source Han Serif SC",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    linear-gradient(var(--line2) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line2) 1px,transparent 1px);
+  background-size:64px 64px;
+  background-position:-1px -1px;
+}
+::selection{background:rgba(156,61,38,.18)}
+
+/* ── 进度条 ── */
+.progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:120;background:transparent}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--accent));transition:width .1s linear}
+
+/* ── 侧边导航 ── */
+.rail{
+  position:fixed;left:32px;top:50%;transform:translateY(-50%);
+  z-index:100;display:flex;flex-direction:column;gap:2px;
+  font-size:11px;letter-spacing:.08em;
+}
+.rail a{
+  color:#6f685c;text-decoration:none;padding:4px 0 4px 14px;
+  border-left:1px solid var(--line);transition:.25s;display:flex;gap:8px;align-items:center;
+}
+.rail a span{font-family:var(--serif);font-style:italic;opacity:.55;min-width:16px}
+.rail a:hover{color:var(--ink);border-left-color:var(--ink)}
+.rail a.on{color:var(--accent);border-left-color:var(--accent)}
+.rail a.on span{opacity:1}
+/* 深色区块上反色，保证可读 */
+body.on-dark .rail a{color:rgba(246,242,234,.5);border-left-color:rgba(246,242,234,.18)}
+body.on-dark .rail a:hover{color:rgba(246,242,234,.9);border-left-color:rgba(246,242,234,.6)}
+body.on-dark .rail a.on{color:#e8c98a;border-left-color:#e8c98a}
+@media(max-width:1180px){.rail{display:none}}
+
+/* ── 容器 ── */
+.wrap{max-width:1080px;margin:0 auto;padding:0 40px}
+@media(max-width:640px){.wrap{padding:0 22px}}
+
+/* ── Hero ── */
+.hero{padding:100px 0 80px;position:relative;overflow:hidden}
+.hero .wrap{position:relative}
+.eyebrow{
+  font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:12px;margin-bottom:36px;
+}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+h1{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(40px,6.4vw,90px);
+  line-height:1.08;letter-spacing:-.01em;
+}
+h1 em{font-style:italic;color:var(--accent)}
+h1 .sub{display:block;font-size:.42em;line-height:1.5;color:var(--ink2);margin-top:22px;letter-spacing:.02em}
+.lede{
+  margin-top:40px;max-width:600px;font-size:16.5px;color:var(--ink2);line-height:1.9;
+}
+.lede b{font-weight:600;color:var(--ink);border-bottom:1px solid rgba(156,61,38,.4)}
+
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  margin-top:72px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.stat{padding:26px 20px 24px;border-right:1px solid var(--line2)}
+.stat:last-child{border-right:none}
+.stat .n{
+  font-family:var(--serif);font-size:clamp(34px,4.4vw,54px);line-height:1;
+  letter-spacing:-.02em;display:block;
+}
+.stat .l{font-size:11.5px;color:var(--muted);letter-spacing:.1em;margin-top:10px;display:block}
+.stat.keep .n{color:var(--teal)}
+.stat.cut .n{color:var(--accent)}
+@media(max-width:700px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:none}
+  .stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line2)}
+}
+
+/* ── 通用区块 ── */
+section{padding:88px 0}
+.sec-head{display:flex;align-items:baseline;gap:20px;margin-bottom:44px;flex-wrap:wrap}
+.sec-no{
+  font-family:var(--serif);font-style:italic;font-size:13px;color:var(--accent);
+  letter-spacing:.1em;border:1px solid rgba(156,61,38,.3);border-radius:99px;padding:2px 12px;
+}
+.sec-head h2{
+  font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.2vw,38px);letter-spacing:-.01em;line-height:1.2;
+}
+.sec-head p{flex:1 1 100%;color:var(--ink2);max-width:660px;font-size:15px;margin-top:6px}
+
+/* ── 判据 ── */
+.criteria{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.crit{background:var(--paper2);padding:30px 26px 32px}
+.crit .k{font-family:var(--serif);font-size:12px;letter-spacing:.16em;color:var(--accent);display:block;margin-bottom:14px}
+.crit h3{font-family:var(--serif);font-weight:400;font-size:20px;margin-bottom:10px}
+.crit p{font-size:13.5px;color:var(--ink2);line-height:1.85}
+.crit .ex{margin-top:14px;font-size:12.5px;color:var(--muted);border-left:2px solid var(--line);padding-left:12px;line-height:1.7}
+@media(max-width:800px){.criteria{grid-template-columns:1fr}}
+
+/* ── 主题分布 ── */
+.dist{display:flex;flex-direction:column;gap:0;margin-top:8px}
+.row{
+  display:grid;grid-template-columns:34px 190px 1fr 88px;align-items:center;gap:16px;
+  padding:11px 0;border-bottom:1px solid var(--line2);cursor:pointer;transition:.2s;
+}
+.row:first-child{border-top:1px solid var(--line2)}
+.row:hover{background:rgba(255,253,248,.7)}
+.row .idx{font-family:var(--serif);font-style:italic;color:var(--muted);font-size:12px}
+.row .nm{font-size:14px;letter-spacing:.02em}
+.row .bar{height:5px;background:rgba(23,21,15,.06);position:relative;overflow:hidden}
+.row .bar i{
+  position:absolute;left:0;top:0;bottom:0;width:0;
+  background:linear-gradient(90deg,rgba(156,61,38,.55),var(--accent));
+  transition:width 1.1s cubic-bezier(.22,.61,.36,1);
+}
+.row .ct{font-family:var(--serif);font-size:12.5px;color:var(--muted);text-align:right;white-space:nowrap}
+@media(max-width:640px){
+  .row{grid-template-columns:24px 1fr 40px;gap:10px}
+  .row .bar{grid-column:1/-1;margin-top:4px}
+  .row .nm{font-size:13px}
+}
+
+/* ── 工具条 ── */
+.toolbar{
+  position:sticky;top:0;z-index:80;background:rgba(246,242,234,.92);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);padding:14px 0;
+}
+.toolbar .wrap{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.search{
+  flex:1 1 220px;display:flex;align-items:center;gap:9px;
+  border:1px solid var(--line);background:var(--paper2);padding:8px 14px;border-radius:2px;
+}
+.search input{
+  border:none;outline:none;background:transparent;font-family:var(--sans);font-size:13.5px;
+  width:100%;color:var(--ink);
+}
+.search input::placeholder{color:var(--muted)}
+.search svg{flex:0 0 auto;opacity:.45}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+  font-size:12px;letter-spacing:.03em;padding:5px 13px;border:1px solid var(--line);
+  background:transparent;color:var(--ink2);border-radius:99px;cursor:pointer;transition:.2s;font-family:var(--sans);
+}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.hint{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+@media(max-width:760px){.toolbar .wrap{gap:10px}.chips{width:100%;min-width:0;flex:1 1 100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}.chip{white-space:nowrap;flex:0 0 auto}}
+
+/* ── 章节 ── */
+.chapter{padding:74px 0 10px;scroll-margin-top:70px}
+.ch-head{display:grid;grid-template-columns:88px 1fr;gap:24px;align-items:baseline;padding-bottom:26px;border-bottom:1px solid var(--line)}
+.ch-num{
+  font-family:var(--serif);font-size:56px;line-height:.85;color:rgba(23,21,15,.14);letter-spacing:-.03em;
+}
+.ch-title{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,34px);line-height:1.25}
+.ch-title small{display:block;font-family:var(--sans);font-size:13px;color:var(--muted);letter-spacing:.12em;margin-bottom:8px}
+.ch-def{margin-top:12px;font-size:14.5px;color:var(--ink2);max-width:640px}
+@media(max-width:640px){.ch-head{grid-template-columns:1fr;gap:8px}.ch-num{font-size:40px}}
+
+/* ── 语录卡片 ── */
+.qs{display:flex;flex-direction:column}
+.q{
+  display:grid;grid-template-columns:56px 1fr;gap:20px;
+  padding:30px 8px 28px;border-bottom:1px solid var(--line2);
+  transition:.35s;position:relative;
+}
+.q:hover{background:var(--paper2);padding-left:20px;padding-right:20px}
+.q-no{
+  font-family:var(--serif);font-style:italic;font-size:15px;color:var(--gold);
+  padding-top:5px;letter-spacing:.04em;
+}
+.q-body{font-family:var(--serif);font-size:17.5px;line-height:1.95;letter-spacing:.005em;color:var(--ink)}
+.q-body strong{font-weight:600;box-shadow:inset 0 -8px 0 rgba(168,131,47,.18)}
+.q-note{
+  margin-top:16px;font-size:13px;color:var(--ink2);line-height:1.85;
+  border-left:2px solid rgba(43,95,86,.35);padding-left:13px;
+}
+.q-note b{color:var(--teal);font-weight:600;letter-spacing:.04em;font-size:11.5px}
+.q-meta{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.tag{
+  font-size:10.5px;letter-spacing:.08em;padding:2.5px 9px;border-radius:2px;
+  border:1px solid var(--line);color:var(--muted);background:rgba(255,255,255,.4);
+}
+.tag.mech{color:var(--teal);border-color:rgba(43,95,86,.3);background:var(--teal-soft)}
+.tag.exp{color:var(--gold);border-color:rgba(168,131,47,.3);background:rgba(168,131,47,.07)}
+.tag.val{color:var(--accent);border-color:rgba(156,61,38,.28);background:var(--accent-soft)}
+.tag.src{font-family:var(--serif);font-style:italic;letter-spacing:.02em}
+@media(max-width:640px){
+  .q{grid-template-columns:34px 1fr;gap:12px;padding:24px 0}
+  .q:hover{padding-left:8px;padding-right:8px}
+  .q-body{font-size:16px;line-height:1.9}
+}
+
+/* ── 审计表 ── */
+.audit{border-top:1px solid var(--line)}
+.arow{
+  display:grid;grid-template-columns:1.28fr 1fr 108px;gap:22px;
+  padding:22px 4px;border-bottom:1px solid var(--line2);align-items:start;
+}
+.arow .q-txt{font-family:var(--serif);font-size:15px;line-height:1.8}
+.arow .q-txt span{display:block;font-family:var(--sans);font-size:11.5px;color:var(--muted);margin-top:6px;letter-spacing:.05em}
+.arow .verdict{font-size:13px;color:var(--ink2);line-height:1.8}
+.flag{
+  display:inline-block;font-size:10.5px;letter-spacing:.08em;padding:3px 10px;border-radius:2px;
+  border:1px solid;white-space:nowrap;
+}
+.f-real{color:var(--teal);border-color:rgba(43,95,86,.35);background:var(--teal-soft)}
+.f-half{color:var(--gold);border-color:rgba(168,131,47,.35);background:rgba(168,131,47,.07)}
+.f-fake{color:var(--accent);border-color:rgba(156,61,38,.35);background:var(--accent-soft)}
+.arow .cell{display:flex;justify-content:flex-start}
+@media(max-width:760px){
+  .arow{grid-template-columns:1fr;gap:8px;padding:20px 0}
+  .arow .cell{justify-content:flex-start;margin-top:2px}
+}
+
+/* ── 剔除清单 ── */
+.cutlist{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.cutcard{background:var(--paper2);padding:22px 24px 24px;display:flex;flex-direction:column;gap:10px}
+.cutcard .cw{display:flex;gap:10px;align-items:baseline}
+.cutcard .cno{font-family:var(--serif);font-style:italic;font-size:12px;color:rgba(156,61,38,.6);flex:0 0 auto}
+.cutcard .ct{font-size:13.5px;line-height:1.7;color:var(--ink2);text-decoration:line-through;text-decoration-color:rgba(156,61,38,.65);text-decoration-thickness:1px}
+.cutcard .cr{font-size:12.5px;color:var(--ink2);line-height:1.8;border-top:1px dashed var(--line);padding-top:9px}
+.cutcard .cr b{color:var(--accent);font-weight:600;font-size:11px;letter-spacing:.08em;display:block;margin-bottom:3px}
+@media(max-width:800px){.cutlist{grid-template-columns:1fr}}
+
+/* ── 矛盾 ── */
+.tension{border:1px solid var(--line);background:var(--paper2);padding:0;margin-bottom:16px}
+.t-head{padding:24px 28px;border-bottom:1px dashed var(--line);display:flex;gap:14px;align-items:baseline}
+.t-head .tn{font-family:var(--serif);font-style:italic;color:var(--accent);font-size:13px}
+.t-head h3{font-family:var(--serif);font-weight:400;font-size:18.5px;line-height:1.4}
+.t-body{padding:26px 28px 30px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.t-side .lbl{font-size:10.5px;letter-spacing:.16em;color:var(--muted);display:block;margin-bottom:9px}
+.t-side p{font-family:var(--serif);font-size:15px;line-height:1.85;color:var(--ink2)}
+.t-res{grid-column:1/-1;margin-top:4px;padding-top:20px;border-top:1px solid var(--line);font-size:14px;line-height:1.9;color:var(--ink)}
+.t-res b{color:var(--teal);letter-spacing:.06em;font-size:11.5px;display:block;margin-bottom:6px}
+@media(max-width:700px){.t-body{grid-template-columns:1fr;gap:18px}.t-res{margin-top:0}}
+
+/* ── 行动版 ── */
+.act{background:var(--ink);color:var(--paper);padding:64px 0}
+.act .wrap{max-width:900px}
+.act h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,40px);line-height:1.25;margin-bottom:12px}
+.act .sub{color:rgba(246,242,234,.6);font-size:14px;margin-bottom:40px}
+.act ol{list-style:none;counter-reset:a;display:flex;flex-direction:column}
+.act li{
+  counter-increment:a;display:grid;grid-template-columns:46px 1fr;gap:18px;
+  padding:20px 0;border-bottom:1px solid rgba(246,242,234,.14);align-items:baseline;
+}
+.act li::before{
+  content:counter(a,decimal-leading-zero);font-family:var(--serif);font-style:italic;
+  font-size:14px;color:rgba(246,242,234,.4);
+}
+.act li p{font-family:var(--serif);font-size:16.5px;line-height:1.85}
+.act li p b{color:#e8c98a;font-weight:600}
+
+footer{padding:56px 0 72px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);line-height:2}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+
+/* ── 动画 ── */
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .8s cubic-bezier(.22,.61,.36,1),transform .8s cubic-bezier(.22,.61,.36,1)}
+.js .rv.in{opacity:1;transform:none}
+.hide{display:none !important}
+.empty{padding:60px 0;text-align:center;color:var(--muted);font-size:14px;display:none}
+.empty.on{display:block}
+@media(prefers-reduced-motion:reduce){
+  .js .rv{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<div class="progress"><i></i></div>
+
+<nav class="rail" id="rail">
+  <a href="#method"><span>0</span>判据</a>
+  <a href="#map"><span>1</span>地形</a>
+  <a href="#c1"><span>2</span>底盘</a>
+  <a href="#c2"><span>3</span>体验</a>
+  <a href="#c3"><span>4</span>当下</a>
+  <a href="#c4"><span>5</span>主体性</a>
+  <a href="#c5"><span>6</span>行动</a>
+  <a href="#c6"><span>7</span>环境</a>
+  <a href="#c7"><span>8</span>认知</a>
+  <a href="#c8"><span>9</span>平静</a>
+  <a href="#c9"><span>10</span>关系</a>
+  <a href="#c10"><span>11</span>反人性</a>
+  <a href="#c11"><span>12</span>意义</a>
+  <a href="#audit"><span>13</span>验伪</a>
+  <a href="#cut"><span>14</span>剔除</a>
+  <a href="#tension"><span>15</span>矛盾</a>
+  <a href="#action"><span>16</span>一页</a>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">整理报告 · 语录 · 2026.10</p>
+    <h1>209 条之后，<br>留下 <em>60</em> 条
+      <span class="sub">一次去重、验伪与重排。<br>删掉的不只是凑数的，还有听起来最像金句的那些。</span>
+    </h1>
+    <p class="lede">
+      原始文本 209 条，约 <b>五成半是同义反复</b>——"睡好觉"出现 7 次，"远离烂人"6 次，"别解释自己"5 次。
+      另有 <b>16 处名人署名</b>值得验，其中 6 处查不到出处。这份文档做三件事：合并重复、验证引语、删掉不成立的建议，
+      再把剩下的按你真正会用到它的场景重新排列。
+    </p>
+    <div class="stats">
+      <div class="stat"><span class="n" data-to="209">0</span><span class="l">原始条目</span></div>
+      <div class="stat keep"><span class="n" data-to="60">0</span><span class="l">收录 · 11 个主题</span></div>
+      <div class="stat"><span class="n" data-to="114">0</span><span class="l">同义重复 · 已合并</span></div>
+      <div class="stat cut"><span class="n" data-to="35">0</span><span class="l">剔除 · 不成立或不明智</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="method" class="rv">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">00</span>
+      <h2>先定判据，再动手删</h2>
+      <p>没有判据的整理只是换个排序。这三条是唯一被使用的尺子——注意第三条：一条建议"有效"和它"值得采纳"是两件事。</p>
+    </div>
+    <div class="criteria">
+      <div class="crit">
+        <span class="k">判据一</span>
+        <h3>可溯源</h3>
+        <p>凡是引号里的话，都要能指到具体文本、演讲或书信。查不到出处的，观点可以留，名字必须拆掉。</p>
+        <div class="ex">"费斯汀格法则 10/90" —— 费斯汀格研究的是认知失调，从没提出过这个法则。</div>
+      </div>
+      <div class="crit">
+        <span class="k">判据二</span>
+        <h3>不靠幸存者说话</h3>
+        <p>只观察赢家的人，必然会得出"赢家都如何如何"的规律。这类条目看着有说服力，实际信息量为零。</p>
+        <div class="ex">"成功者多有被孤立的童年" —— 失败者里同样比例的人有，只是没人去统计。</div>
+      </div>
+      <div class="crit">
+        <span class="k">判据三</span>
+        <h3>可执行且不自伤</h3>
+        <p>能落到具体动作，且长期照做不会反噬关系、健康与判断力。纯粹的道德相对主义与自我麻痹，一律不要。</p>
+        <div class="ex">"谁觉得你是坏人，你就放开了做个坏人" —— 说出来很爽，做出来是失控。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="map" class="rv" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">01</span>
+      <h2>地形：60 条落在哪里</h2>
+      <p>横向长短是这一主题在原稿里占了多少条（含跨章重叠，故合计略多于总条数）。越长，说明原稿越反复念叨——往往也是它真正在意的事。<strong>颜色最浅的两章，是原稿写得最少、但价值最高的部分。</strong>点击任意一行跳到该章节。</p>
+    </div>
+    <div class="dist" id="dist">
+      <div class="row" data-go="#c1"><span class="idx">01</span><span class="nm">底盘 · 身体与精力</span><span class="bar"><i data-w="46"></i></span><span class="ct">5 条 / 源 10</span></div>
+      <div class="row" data-go="#c2"><span class="idx">02</span><span class="nm">体验 · 人生不是业绩</span><span class="bar"><i data-w="88"></i></span><span class="ct">6 条 / 源 18</span></div>
+      <div class="row" data-go="#c3"><span class="idx">03</span><span class="nm">当下 · 时间的刻度</span><span class="bar"><i data-w="52"></i></span><span class="ct">5 条 / 源 7</span></div>
+      <div class="row" data-go="#c4"><span class="idx">04</span><span class="nm">主体性 · 评价权</span><span class="bar"><i data-w="96"></i></span><span class="ct">6 条 / 源 16</span></div>
+      <div class="row" data-go="#c5"><span class="idx">05</span><span class="nm">行动 · 先做再想</span><span class="bar"><i data-w="72"></i></span><span class="ct">6 条 / 源 11</span></div>
+      <div class="row" data-go="#c6"><span class="idx">06</span><span class="nm">环境 · 筛选与止损</span><span class="bar"><i data-w="78"></i></span><span class="ct">6 条 / 源 14</span></div>
+      <div class="row" data-go="#c7"><span class="idx">07</span><span class="nm">认知 · 标准与祛魅</span><span class="bar"><i data-w="60"></i></span><span class="ct">6 条 / 源 12</span></div>
+      <div class="row" data-go="#c8"><span class="idx">08</span><span class="nm">平静 · 更合理的野心</span><span class="bar"><i data-w="66"></i></span><span class="ct">5 条 / 源 11</span></div>
+      <div class="row" data-go="#c9"><span class="idx">09</span><span class="nm">关系 · 互惠与边界</span><span class="bar"><i data-w="44"></i></span><span class="ct">5 条 / 源 9</span></div>
+      <div class="row" data-go="#c10"><span class="idx">10</span><span class="nm">反人性 · 习惯与复利</span><span class="bar"><i data-w="40"></i></span><span class="ct">5 条 / 源 8</span></div>
+      <div class="row" data-go="#c11"><span class="idx">11</span><span class="nm">意义 · 自己签发</span><span class="bar"><i data-w="50"></i></span><span class="ct">5 条 / 源 14</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="wrap">
+    <label class="search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="搜关键词，例如：睡眠、跑路、评价、复利…">
+    </label>
+    <div class="chips" id="chips">
+      <button class="chip on" data-f="all">全部</button>
+      <button class="chip" data-f="1">底盘</button>
+      <button class="chip" data-f="2">体验</button>
+      <button class="chip" data-f="3">当下</button>
+      <button class="chip" data-f="4">主体性</button>
+      <button class="chip" data-f="5">行动</button>
+      <button class="chip" data-f="6">环境</button>
+      <button class="chip" data-f="7">认知</button>
+      <button class="chip" data-f="8">平静</button>
+      <button class="chip" data-f="9">关系</button>
+      <button class="chip" data-f="10">反人性</button>
+      <button class="chip" data-f="11">意义</button>
+    </div>
+    <span class="hint" id="hint">60 条</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <p class="empty" id="empty">没有匹配的条目。换个词试试。</p>
+</div>
+
+<!-- ══════════ 01 底盘 ══════════ -->
+<section class="chapter" id="c1" data-ch="1">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div class="ch-num">01</div>
+      <div>
+        <div class="ch-title"><small>PRIORITY</small>底盘：身体是所有建议的前提</div>
+        <p class="ch-def">原文里出现最频繁的一组，也是最容易被当成废话跳过的一组。它之所以值得放在第一章，是因为后面十条建议全部依赖它成立——缺觉的人做不出任何一条。</p>
+      </div>
+    </div>
+    <div class="qs">
+      <article class="q rv" data-ch="1">
+        <div class="q-no">01</div>
+        <div>
+          <p class="q-body">那些能长期保持高水平输出的人，共同点往往不是努力，也不是聪明，而是<strong>身体状态和精力远超同龄人</strong>。他们把吃饭、睡觉、运动当成头等大事——到了点，手头天大的事也先放下。</p>
+          <p class="q-note"><b>编者按</b>　这条是全文里最接近"可验证规律"的一条。长期输出拼的是恢复能力，不是意志力储存量。原文那种"我观察过身边所有人，无一例外"的口气要打折，但结论站得住。</p>
+          <div class="q-meta"><span class="tag exp">经验规律</span><span class="tag src">原 #14</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="1">
+        <div class="q-no">02</div>
+        <div>
+          <p class="q-body">人生的排序应该是：<strong>睡好觉、身体好</strong>第一；<strong>到处玩、多体验</strong>第二；工作和收入第三。不是不要事业，是别把顺序倒过来——这个世界的赢家只有两种，身体好的和心情好的。</p>
+          <p class="q-note"><b>编者按</b>　这是我保留的唯一一个"排序型"论断。它有用，因为排序本身就能替你做决定：当两件事冲突时，不需要再权衡。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #19 · #156 · #198</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="1">
+        <div class="q-no">03</div>
+        <div>
+          <p class="q-body">生活最容易被低估的胜利，就是<strong>睡好觉</strong>。把睡眠当成新一天的开始，而不是旧一天的结束——因为睡不够毁掉的是那个还没开始的明天。</p>
+          <p class="q-note"><b>编者按</b>　原文在"把睡眠列为主线的理由"上说了很多，本质只有一句：睡眠是唯一无法用意志力赊账的变量。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #159 · #12</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="1">
+        <div class="q-no">04</div>
+        <div>
+          <p class="q-body">睡懒觉、追剧、打游戏、发呆，都不是浪费时间。<strong>为这些事自责，才是浪费时间。</strong>人是需要休息的，你努力上进，归根结底是为了让生活变好——如果为了成功失去了享受生活的能力，就违背了初衷。</p>
+          <p class="q-note"><b>编者按</b>　这是全稿里最实用的一条心理技术：把"休息"从"待偿还的债"里拿出来。它不反努力，它反的是那种永远在欠账的焦虑。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #144 · #186</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="1">
+        <div class="q-no">05</div>
+        <div>
+          <p class="q-body">人生中只有三样东西不会背叛你：<strong>你的经历、你的健康、你内心的平静。</strong>时间与注意力投向哪里，哪里就会成为你的人生。</p>
+          <p class="q-note"><b>编者按</b>　这句被我提为全文的总纲。它好，是因为它把"该追求什么"换成了一个更可操作的问题：你正在把注意力投给谁。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #162 · #47</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 02 体验 ══════════ -->
+<section class="chapter" id="c2" data-ch="2">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div class="ch-num">02</div>
+      <div>
+        <div class="ch-title"><small>EXPERIENCE</small>体验：人生是感受的累加，不是业绩的累加</div>
+        <p class="ch-def">原稿合并了 18 条同义条目才得出这一章，是全篇密度最高的主张。它对抗的不是懒惰，而是"等条件具备再开始生活"这个默认设定。</p>
+      </div>
+    </div>
+    <div class="qs">
+      <article class="q rv" data-ch="2">
+        <div class="q-no">06</div>
+        <div>
+          <p class="q-body">生活最重要的能力，是<strong>能随时随地用很低的成本获得一点点愉悦</strong>：公园晒太阳、看日落、海边吹风、咖啡馆坐一下午、学点新东西、看一部喜欢的电影。把注意力收拢在自己身上，不被外界干扰。</p>
+          <p class="q-note"><b>编者按</b>　这条的可贵在于"低成本"三个字。它把幸福从"需要攒够条件"改成了"随时可取"，这是全稿里最反消费主义的一句。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #3</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="2">
+        <div class="q-no">07</div>
+        <div>
+          <p class="q-body">永远不要推迟享受。想去的地方就去，想吃的东西就吃，新买的衣服今天就穿。<strong>这些看似微不足道的快乐，是人生里实实在在的"赚到"。</strong>别把生活寄托在以后——人生没有以后，每一刻都是现在。</p>
+          <p class="q-note"><b>编者按</b>　需要加一个限定：它针对的是"享受"，不是"决定"。享受可以立刻，重大选择仍要慢。原文没说这层，我补上。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #10 · #70</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="2">
+        <div class="q-no">08</div>
+        <div>
+          <p class="q-body">8 岁想要的玩具，16 岁再拥有只会觉得幼稚；18 岁的怦然心动，错过就终生难以复刻。<strong>体验是有保质期的</strong>，它不会因为延后而增值，只会因为延迟而失效。</p>
+          <p class="q-note"><b>编者按</b>　这是全稿里论证最干净的一条：用一个无法反驳的反例（玩具）建立了"体验有时效"这个模型。<strong>它同时也解释了为什么"以后再说"通常是错的。</strong></p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #119</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="2">
+        <div class="q-no">09</div>
+        <div>
+          <p class="q-body">人生体验像股票，要懂得在高点套现：体力最好、感受力最强的时候多去旅行；表达欲最强、思想最活跃的时候多留下作品；父母健在、家庭最和睦的时候多去感受爱。<strong>拥有什么就体验什么，失去什么就接纳什么。</strong></p>
+          <p class="q-note"><b>编者按</b>　"高点套现"这个类比有风险——人往往不知道自己正在高点。但后半句把它救回来了：不知道也没关系，那就按当下拥有的去用。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #23</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="2">
+        <div class="q-no">10</div>
+        <div>
+          <p class="q-body">幸福和存款一样，是慢慢积攒的。一首好听的歌、一部喜欢的电影、一顿可口的饭，单看都不能改变什么。<strong>可如果每天存一点，日积月累，它们会组成你幸福的一生。</strong></p>
+          <p class="q-note"><b>编者按</b>　"幸福复利"是这个作者最连贯的一个想法（原稿里出现三次）。它有个隐含前提值得记住：复利需要<strong>不中断</strong>，所以它反对的是"憋大招式"的快乐。</p>
+          <div class="q-meta"><span class="tag exp">经验规律</span><span class="tag src">原 #118 · #141</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="2">
+        <div class="q-no">11</div>
+        <div>
+          <p class="q-body">那些你曾经爱过、追逐过，最终一无所获的东西，并不是毫无意义的。<strong>因为在追逐的过程里，你已经获得了幸福、平静，和直面困难的勇气</strong>——这就是它们存在过最大的意义。</p>
+          <p class="q-note"><b>编者按</b>　这条是对"结果导向"最有力的反驳，也是我认为不该删的少数抒情段。它把"失败"重新定义为"已结算的收益"。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #71</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 03 当下 ══════════ -->
+<section class="chapter" id="c3" data-ch="3">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div class="ch-num">03</div>
+      <div>
+        <div class="ch-title"><small>PRESENT</small>当下：时间只有一个刻度</div>
+        <p class="ch-def">这一章负责处理焦虑。原文用了大量篇幅反复说同一件事：过去和未来都不存在，只有此刻。去掉修辞后，它其实给了三个能用的工具。</p>
+      </div>
+    </div>
+    <div class="qs">
+      <article class="q rv" data-ch="3">
+        <div class="q-no">12</div>
+        <div>
+          <p class="q-body">不要回望过往，也不要恐惧将来。所谓过去，不过是无数个已经经历的现在；所谓未来，也不过是无数个尚未到来的现在。<strong>你唯一拥有的，永远只有此时此刻。</strong></p>
+          <p class="q-note"><b>编者按</b>　这不是鸡汤，它接近斯多葛的核心操作：把注意力从"不可控的时间"收回到"可控的当下行动"。原文写得很长，逻辑就这一句。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #32 · #150</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="3">
+        <div class="q-no">13</div>
+        <div>
+          <p class="q-body">人生不是等到某一天所有问题都解决了，幸福才能开始。<strong>人生是即使问题还没解决，我们依然可以享受当下。</strong></p>
+          <p class="q-note"><b>编者按</b>　这句短，但它是全稿里唯一直接否定"等"字的一句。值得单独抄下来贴在显示器边上。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #38</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="3">
+        <div class="q-no">14</div>
+        <div>
+          <p class="q-body">快速成长的秘密是<strong>极致短视</strong>：不要一上来就规划三年五年，先把今天过好。先短视，才能长视——你能控制的只有今天。设计好理想的一天，然后日复一日重复它。<strong>所谓十年，也不过是普通的一天重复了三千多次。</strong></p>
+          <p class="q-note"><b>编者按</b>　这是全稿里最能落地的一条，也是它和"长期主义"喊口号的最大区别：长期主义在这条里被拆成了"设计一天"这个具体动作。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #90</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="3">
+        <div class="q-no">15</div>
+        <div>
+          <p class="q-body">人生是可以慢半拍的。允许自己做一个迟到者，不必为了赶上所谓普世的人生阶段去改变自己的节奏。<strong>有些东西不是越满越好，恰到好处才是。</strong></p>
+          <p class="q-note"><b>编者按</b>　这条与上一章"不要推迟享受"并列时会产生张力：一个说别等，一个说可以慢。区别在于——享受别等，进度可以慢。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #157</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="3">
+        <div class="q-no">16</div>
+        <div>
+          <p class="q-body">没有人会一直看着后视镜开车。你只管往前走，做眼前该做的事。<strong>等你走得够远了会发现，你的人生其实没什么问题。</strong></p>
+          <p class="q-note"><b>编者按</b>　后视镜这个比喻比我见过的多数"放下过去"的说法都准确：不是让你忘记，而是提醒你，它的正确用途是偶尔看一眼，不是一直看。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #150</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 04 主体性 ══════════ -->
+<section class="chapter" id="c4" data-ch="4">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div class="ch-num">04</div>
+      <div>
+        <div class="ch-title"><small>AGENCY</small>主体性：把评价权收回来</div>
+        <p class="ch-def">原稿出现最多、也最容易被误读的一章。它真正的主张不是"别在乎别人"，而是"把裁判的位置从外部移到内部"——这两者差别很大。</p>
+      </div>
+    </div>
+    <div class="qs">
+      <article class="q rv" data-ch="4">
+        <div class="q-no">17</div>
+        <div>
+          <p class="q-body">这个世界不存在最优建议。不论别人带着什么情绪、如何包装与煽动，都别急着做选择。<strong>没有谁能代替你经历人生</strong>——只有你自己清楚想要什么、愿意付出什么、能承受什么后果。</p>
+          <p class="q-note"><b>编者按</b>　配合下一章的"求建议是为了获得视角"一起读效果最好：建议有价值，但价值不在"答案"那一层。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #16 · #40</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="4">
+        <div class="q-no">18</div>
+        <div>
+          <p class="q-body">真正活明白的人，会做一个<strong>观察者</strong>而不是表演者。丧失主体性的开始，就是想象"别人眼中的自己"——用他人的眼光评判自我，最终会失去真正的自我。</p>
+          <p class="q-note"><b>编者按</b>　这条给出了一个具体到能自查的信号：当你开始在心里排演"他们会怎么看我"，主体性就已经在流失了。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #199 · #68</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="4">
+        <div class="q-no">19</div>
+        <div>
+          <p class="q-body">最好的人生习惯，不是健身也不是阅读，而是建立一个<strong>属于自己的内部评价体系</strong>。一辈子活在别人眼光里的人，会把言行、是非、成败全部交出去，最终变成提线木偶。</p>
+          <p class="q-note"><b>编者按</b>　"内部评价体系"是这一章的核心概念，也是我认为整份稿子最值钱的一个提法。它不是"不在乎评价"，是自己先定好标准，再拿外界反馈当参考。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #203 · #31</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="4">
+        <div class="q-no">20</div>
+        <div>
+          <p class="q-body">思想变强的核心只有一件事：<strong>成为自己人生的绝对决策者</strong>。敢选，敢承担，不回头。做决定前认真想，做出决定后坦然接受结果。</p>
+          <p class="q-note"><b>编者按</b>　"绝对决策者"这个说法容易滑向固执。要补一句原文没说的：绝对决策权指的是<strong>决定权</strong>，不包括"不用听事实"。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #139 · #86</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="4">
+        <div class="q-no">21</div>
+        <div>
+          <p class="q-body">别人怎么评价你、对你抱什么期待、甚至怎么审判你，本质上都是<strong>他们观念的外投射</strong>。你只需要照顾好自己的感受，把日子过得舒服、自由、自在。</p>
+          <p class="q-note"><b>编者按</b>　这里有个容易走偏的地方：说"评价是投射"是为了让你不被绑住，不是让你拒绝一切反馈。分辨标准是——对方在描述事实，还是在表达立场。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #68 · #107 · #164</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="4">
+        <div class="q-no">22</div>
+        <div>
+          <p class="q-body">最容易被低估的转变，是<strong>不再向所有人透露自己生活中的一切</strong>。不是每个人都有资格知晓你的计划、选择与成功。你不需要向他人解释自己，也不需要争取他们虚伪的支持。</p>
+          <p class="q-note"><b>编者按</b>　这条的实用价值在于它给了"少说"一个正当理由：不是防人，是省下解释的成本。原文后面那套"螃蟹效应"叙事我删了——把人际默认设为敌意，代价太大。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #168 · #177</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 05 行动 ══════════ -->
+<section class="chapter" id="c5" data-ch="5">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div class="ch-num">05</div>
+      <div>
+        <div class="ch-title"><small>ACTION</small>行动：准备这件事，永远缺最后一格</div>
+        <p class="ch-def">原稿里"先做再想"的变体出现了七八次，但多数只是换语气重复。真正有信息量的只有一条：拖延摧毁的不是时间，是行动的自信。</p>
+      </div>
+    </div>
+    <div class="qs">
+      <article class="q rv" data-ch="5">
+        <div class="q-no">23</div>
+        <div>
+          <p class="q-body">拖延最大的坏处，不是耽误时间，而是<strong>让人逐渐变得犹豫，失去行动的信心</strong>。永远不要以"来得及"为理由推迟——拖延不会让问题消失，只会让焦虑累积。最终打败你的不是问题，是那句"再等等"。</p>
+          <p class="q-note"><b>编者按</b>　这是全稿对拖延最准确的一次诊断。它解释了为什么"反正来得及"是危险信号：损失的不是时间，是自我效能感。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #5 · #55</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="5">
+        <div class="q-no">24</div>
+        <div>
+          <p class="q-body">当你决定开始行动的那一刻，<strong>最艰难的部分已经结束了</strong>。真正重要的事从不等你准备万全，都是机会来了硬着头皮上。你越早开始，就越早知道自己错在哪。</p>
+          <p class="q-note"><b>编者按</b>　原文配了库克那句"You'll never be ready"。这句话的意思可信，但字句查不到权威出处（见验伪表），所以我把它作为观点保留、作为引语撤下。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #18 · #24</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="5">
+        <div class="q-no">25</div>
+        <div>
+          <p class="q-body">重要的决策才需要深思熟虑；生活里的小事，<strong>立刻去做</strong>。当一件事让你感到不舒服时，趁它还没变成大问题赶紧处理掉——让问题在情绪滋生之前解决。</p>
+          <p class="q-note"><b>编者按</b>　这条背后是可执行的回路："发现问题 → 思考 → 解决"，抢在情绪发酵前面。它区分了"想清楚"和"想太多"，界线就是这件事的后果可不可逆。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #84 · #5</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="5">
+        <div class="q-no">26</div>
+        <div>
+          <p class="q-body">人生最荒唐的失败，是事情还没开始，你已经在脑子里失败了一百次。<strong>真正的勇气不是毫无畏惧，是明知道害怕，依然愿意做那些风险可控、值得尝试的事。</strong></p>
+          <p class="q-note"><b>编者按</b>　"风险可控"这四个字是我从原文里保下来的关键限定。它把"勇敢"和"莽"分开了，这条也因此变得可用而不是上头。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #55 · #131 · #195</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="5">
+        <div class="q-no">27</div>
+        <div>
+          <p class="q-body">做一个决定时，想明白两件事就够了：<strong>第一，做的时候你是喜欢的、快乐的，做完也不后悔；第二，做的时候未必快乐，但不做你一定会后悔。</strong>用这两条衡量，大多数决定没那么复杂。</p>
+          <p class="q-note"><b>编者按</b>　这是全稿里唯一一条真正的决策工具，其他都只是态度。它好用是因为把"对错"换成了"后悔不后悔"——一个你能回答的问题。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #93</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="5">
+        <div class="q-no">28</div>
+        <div>
+          <p class="q-body">运气其实是这么回事：<strong>当你彻底放弃了对运气的幻想，不问结果、不留退路地踏实去做，往往正是运气真正降临的时候。</strong>放下侥幸，才是对运气最大的诚意。</p>
+          <p class="q-note"><b>编者按</b>　听起来玄，其实是"可控性聚焦"的通俗版：把注意力从结果挪到动作，成功概率上升是副产品，不是神秘力量。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #197 · #108</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 06 环境 ══════════ -->
+<section class="chapter" id="c6" data-ch="6">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div class="ch-num">06</div>
+      <div>
+        <div class="ch-title"><small>ENVIRONMENT</small>环境：筛选优于硬扛</div>
+        <p class="ch-def">这一章和第十章（反人性）在原文里是互相打架的。我先原样放出来，矛盾留到最后统一处理——因为那个矛盾本身很有价值。</p>
+      </div>
+    </div>
+    <div class="qs">
+      <article class="q rv" data-ch="6">
+        <div class="q-no">29</div>
+        <div>
+          <p class="q-body">人不需要逼自己努力，更该做的是<strong>筛选环境</strong>。离开那些让你不断怀疑自我、持续精神内耗的地方，去找与你追求契合的圈子和生活方式。先获得自在，才有力气成长。</p>
+          <p class="q-note"><b>编者按</b>　这是全稿里最反直觉的一条，也有最多人需要用。它不否认努力，它指出努力的效率取决于场地——在消耗你的地方努力，是在用意志力填补环境的漏洞。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #7 · #127 · #154</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="6">
+        <div class="q-no">30</div>
+        <div>
+          <p class="q-body"><strong>不要在有毒的环境里考验自己的意志力。</strong>真正有能力的人，最终都会离开那个让自己身体变差、价值被低估的地方——无论那里看起来多么正能量。</p>
+          <p class="q-note"><b>编者按</b>　"无论看起来多么正能量"是这句的锋刃。它指向的是那些用使命感、奋斗叙事包装起来的消耗型组织。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #208</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="6">
+        <div class="q-no">31</div>
+        <div>
+          <p class="q-body">人生中最实用的技能之一，是<strong>学会跑路</strong>，而不是忍耐、坚持、苦中作乐、给自己洗脑。不合适的环境可以走，不合适的工作可以辞，不合适的项目可以停，不合适的人可以远离——及时止损，能避开世上大部分伤害。</p>
+          <p class="q-note"><b>编者按</b>　原文把"坚持"整体否定了，这过头了。准确的说法是：坚持只对"已经在产出正反馈的事"成立，对沉没成本不成立。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #133 · #22</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="6">
+        <div class="q-no">32</div>
+        <div>
+          <p class="q-body">不要浪费精力去揭露别人，<strong>默默观察，然后调整彼此的距离</strong>。不要因为关系去包容行为，要<strong>用行为去定义关系</strong>。能成事的人对劣质关系的切割异常干脆：一旦发现对方不守信、不担当，立即终止。</p>
+          <p class="q-note"><b>编者按</b>　"用行为定义关系"是这一章最好的一个句子。它给了一个不需要争吵、不需要说理的执行路径：不辩论，只调距离。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #145 · #176 · #54</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="6">
+        <div class="q-no">33</div>
+        <div>
+          <p class="q-body">如果身边有一个眼界、阅历、知识量都在你之上，却仍愿意俯身与你交流的人，这是真正的幸事。<strong>你能暂时借用他的视野和认知，站在更远的位置重新看问题</strong>——倘若他还愿意尊重你、倾听你，那就是良师益友。</p>
+          <p class="q-note"><b>编者按</b>　这条与第四章"收回评价权"看似冲突，其实互补：评价权归自己，但<strong>认知增量必须从外部来</strong>。前者防的是被定义，后者求的是被拓宽。</p>
+          <div class="q-meta"><span class="tag exp">经验规律</span><span class="tag src">原 #161</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="6">
+        <div class="q-no">34</div>
+        <div>
+          <p class="q-body">和雄心勃勃的人在一起，他们不会嘲笑你的尝试。<strong>真正有野心的人不觉得别人的理想可笑</strong>——他们明白勇气先于能力，今天不切实际的念头，可能正是某个人未来的人生起点。</p>
+          <p class="q-note"><b>编者按</b>　这条提供了一个筛选同伴的可操作标准：不看对方多成功，看他听到你的计划时第一反应是追问还是泼冷水。</p>
+          <div class="q-meta"><span class="tag exp">经验规律</span><span class="tag src">原 #116</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 07 认知 ══════════ -->
+<section class="chapter" id="c7" data-ch="7">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div class="ch-num">07</div>
+      <div>
+        <div class="ch-title"><small>PERCEPTION</small>认知：标准、祛魅与语言</div>
+        <p class="ch-def">原稿谈成长谈了几十次，但真正谈"认知如何升级"的只有一条最有价值：你的上限，取决于你见过的最好标准。</p>
+      </div>
+    </div>
+    <div class="qs">
+      <article class="q rv" data-ch="7">
+        <div class="q-no">35</div>
+        <div>
+          <p class="q-body">一个人的成长上限，不取决于努力程度，而取决于<strong>他曾经接触过的最高标准</strong>。长期处在低标准环境里，人会把含糊当正常，把"做完了"当"做好了"，甚至把认真做事的人视为异类。</p>
+          <p class="q-note"><b>编者按</b>　全文最有洞察力的一条。它把"努力"这个不可操作的概念换成了"参照系"，而参照系是可以主动更换的——这是它比"要努力"有用一百倍的原因。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #109</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="7">
+        <div class="q-no">36</div>
+        <div>
+          <p class="q-body">成长就是不断对身边的事物<strong>祛魅</strong>：对名声、物质、权力、感情、关系。人总会把周围的一切想得太完美，赋予它们不切实际的期待。<strong>走近之后你会发现，任何光鲜背后都有不为人知的局限。</strong></p>
+          <p class="q-note"><b>编者按</b>　祛魅不是变得 cynic（愤世），而是把期待值调回实际水平——这样你既不会因为幻灭而崩塌，也不会因为神化而自卑。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #73</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="7">
+        <div class="q-no">37</div>
+        <div>
+          <p class="q-body">人们总喜欢用<strong>战术上的勤奋，掩盖战略上的懒惰</strong>：用无意义的忙碌掩盖内心的不安。外在努力很直观，容易获得认可；内在思考是沉默的，短期没有回报，也无法被人察觉。</p>
+          <p class="q-note"><b>编者按</b>　原文在此引了亨利·福特"思考是最艰苦的工作，所以很少有人愿意从事它"——这句出处真实，可以放心用。它解释了为什么"忙"是一种最舒服的逃避。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #30 · #61</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="7">
+        <div class="q-no">38</div>
+        <div>
+          <p class="q-body">维特根斯坦说：<strong>你的语言，就是你世界的边界。</strong>精准的表达背后，是扎实的知识储备、清晰的思维逻辑，以及对世界深刻的理解。你读的书、经历的事、思考的结果，都会沉淀在你的谈吐里。</p>
+          <p class="q-note"><b>编者按</b>　引语真实（《逻辑论哲学》5.6）。但原文后半段"听一个人说话就能判断他的阶层"我删了——那是把一个哲学命题降级成了势利眼。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #79</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="7">
+        <div class="q-no">39</div>
+        <div>
+          <p class="q-body">面对重大决策时，<strong>寻求建议的目的不是得到答案，也不是增强信心，而是获得视角</strong>。没人比你更了解自己的需求，但每个人都能分享自己的经历。<strong>所以最重要的问题不是"我该怎么做"，而是"我可能忽略了什么"。</strong></p>
+          <p class="q-note"><b>编者按</b>　这一句可以直接改变你问问题的方式。它把"求建议"从索取结论，变成了采集盲区——后者永远不会让你被别人的立场绑架。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #40</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="7">
+        <div class="q-no">40</div>
+        <div>
+          <p class="q-body">大多数看起来很厉害的人，其实没有你想象的那么厉害——<strong>他们只是比你更早开始，积累了经验，然后把自己最好的一面呈现出来。</strong>别人的优秀不代表你的渺小。</p>
+          <p class="q-note"><b>编者按</b>　原文原话是"大多数人都是水货"，刻薄且不准确。改成"没那么厉害"更接近事实：光环是信息差，不是能力差。适度仰望，不必神化。</p>
+          <div class="q-meta"><span class="tag exp">经验规律</span><span class="tag src">原 #151 · #204</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 08 平静 ══════════ -->
+<section class="chapter" id="c8" data-ch="8">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div class="ch-num">08</div>
+      <div>
+        <div class="ch-title"><small>STILLNESS</small>平静：一个比幸福更合理的野心</div>
+        <p class="ch-def">原文反复把"内心平静"当作终点。我把这一章单独拎出来，因为它是整份稿子里唯一一个<strong>可以被当作目标、而不是状态</strong>的提法。</p>
+      </div>
+    </div>
+    <div class="qs">
+      <article class="q rv" data-ch="8">
+        <div class="q-no">41</div>
+        <div>
+          <p class="q-body">一个人开始变强，不是变得更狠更拼，而是<strong>内心无限接近平静</strong>。能以舒适、放松、自在的观察者姿态看待生命中发生的一切：不再慌忙对抗，也不再强行控制，只是顺势而为。</p>
+          <p class="q-note"><b>编者按</b>　这条纠正了一个普遍误解：把"强"等同于"狠"。真正的强是<strong>不被触发</strong>——外界还能不能让你失去判断力，才是刻度。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #9 · #33</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="8">
+        <div class="q-no">42</div>
+        <div>
+          <p class="q-body">无聊的生活才是最好的生活。它让你安心工作，悠闲散步，喝着咖啡，有很多时间思考自己真正想要什么。<strong>正如叔本华所说，闲暇才是人生的精华</strong>，除此之外，人的一生不过是辛苦和劳作。</p>
+          <p class="q-note"><b>编者按</b>　叔本华在《人生的智慧》里确实把"闲暇"视为人生的最高财富，引语可用。这条也为"无聊"正了名——无聊是思考的必要条件，不是失败。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #42</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="8">
+        <div class="q-no">43</div>
+        <div>
+          <p class="q-body">人的最终归宿，是回归孤独、回归平静、回归自在。那时你能倾听内心的声音，享受独处与深度思考，也享受干净的生活圈子和丰富的精神世界。<strong>不再迎合，不再寻求认同，走向自己。</strong></p>
+          <p class="q-note"><b>编者按</b>　原文把独处写成了"悟透人生"的标志，我把它降为一种<strong>可选项</strong>而非成就。独处能力是资产；但把"不需要任何人"当成境界，那是另一种失衡。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #25 · #115 · #77</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="8">
+        <div class="q-no">44</div>
+        <div>
+          <p class="q-body"><strong>追求平静，是一种比追求幸福更合理的野心。</strong>当所有人都在慌乱时你依然沉着，当所有人都在动摇时你依然稳如磐石——泰山崩于前而面不改色，胸有惊雷而面如平湖。</p>
+          <p class="q-note"><b>编者按</b>　原文署了博尔赫斯，但查不到确切出处（见验伪表）。观点本身极好：<strong>幸福依赖外部事件，平静只依赖内部秩序</strong>——后者可控，前者不可控。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #173</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="8">
+        <div class="q-no">45</div>
+        <div>
+          <p class="q-body">要允许自己偶尔的倒退和停滞。起床太难，就再躺一会儿；想多玩会儿手机，就再玩一会儿。你不需要时刻积极，也不必强迫自己永远保持最好的状态。<strong>接纳所有起伏，才是与自己和解的开始。</strong></p>
+          <p class="q-note"><b>编者按</b>　这条与第五章"立刻去做"并列，构成一对必要的平衡：<strong>行动上别等状态，情绪上别逼状态</strong>。前者管事情，后者管自己。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #170 · #125</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 09 关系 ══════════ -->
+<section class="chapter" id="c9" data-ch="9">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div class="ch-num">09</div>
+      <div>
+        <div class="ch-title"><small>RELATION</small>关系：互惠、边界与不被牵动</div>
+        <p class="ch-def">原稿在这一块最犬儒，也最容易误导。我保留了它准确的观察，删掉了它对人性的悲观定论。</p>
+      </div>
+    </div>
+    <div class="qs">
+      <article class="q rv" data-ch="9">
+        <div class="q-no">46</div>
+        <div>
+          <p class="q-body">靠近你的人，多少都带着自己的目的：金钱、情绪、关注。<strong>区别不在有没有所求，而在坦诚的人懂得互惠交换，虚伪的人只想单方面拿走。</strong>真正值得交往的，不是对你无所求的人，是尊重你的付出、也愿意回报的人。</p>
+          <p class="q-note"><b>编者按</b>　原文前半句听着冷，但它其实是在给"值得交往"重新下定义——从"不求回报"改成"懂得互惠"。这个改动很关键，前者是道德要求，后者是可观察的行为。</p>
+          <div class="q-meta"><span class="tag exp">经验规律</span><span class="tag src">原 #4</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="9">
+        <div class="q-no">47</div>
+        <div>
+          <p class="q-body">言语是世界上最廉价的诱饵。赞美、承诺、愿景、情绪价值，都可以轻易给出，成本极低。<strong>真正稀缺的是金钱、时间和切实的行动力。</strong>判断一个人或组织值不值得信任，不必听他说什么，只看他实际做过什么。</p>
+          <p class="q-note"><b>编者按</b>　这条可以当成一个通用的过滤器用：把话术全部折价，只看已发生的成本支出。它对识别画饼型关系与画饼型公司同样有效。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #51 · #142</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="9">
+        <div class="q-no">48</div>
+        <div>
+          <p class="q-body">情商不是能说会道、八面玲珑。<strong>真正的高情商是能理解别人</strong>：理解那些说不出口的悲伤和喜悦，感受语言背后真实的情感，也懂得人与人之间的界限与分寸。</p>
+          <p class="q-note"><b>编者按</b>　原文署了俞敏洪，大意可信。这条之所以值得留，是因为它把"情商"从一种表演技巧，拉回到一种理解能力——前者消耗你，后者滋养关系。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #103</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="9">
+        <div class="q-no">49</div>
+        <div>
+          <p class="q-body">寻找伴侣的真正目的，不该是社会地位、经济条件或传宗接代，而是<strong>长期的幸福和内心的平静</strong>，让彼此拥有更健康、更有质量的生活方式。它在你人生决策里的重要程度，超过多数投资决定。</p>
+          <p class="q-note"><b>编者按</b>　"超过多数投资决定"这个比较是这条最有分量的部分。人对几万块的投资反复研究，对共同生活几十年的人却常凭感觉——这个不对称值得被指出。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #130</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="9">
+        <div class="q-no">50</div>
+        <div>
+          <p class="q-body">任何时候，不管别人用什么眼神、语气、态度对你，都记住一件事：<strong>你只办你要办的事。</strong>那些质疑、嫌弃、含沙射影，多半只是你主观情绪的映射。别因为几个眼神、几句话就退缩。</p>
+          <p class="q-note"><b>编者按</b>　这条的实用之处是把注意力锚在"目标"而不是"感受"上。但要留一句修正：<strong>对一次性交涉有效，对长期关系会反噬</strong>——长期关系里，情绪本身就是需要处理的事实。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #184 · #35</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 10 反人性 ══════════ -->
+<section class="chapter" id="c10" data-ch="10">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div class="ch-num">10</div>
+      <div>
+        <div class="ch-title"><small>FRICTION</small>反人性：改变发生在不费力之后</div>
+        <p class="ch-def">这一章与第六章正面冲突。冲突点不在结论，而在顺序——先换环境，还是先对抗自己。答案在最后的矛盾调和里。</p>
+      </div>
+    </div>
+    <div class="qs">
+      <article class="q rv" data-ch="10">
+        <div class="q-no">51</div>
+        <div>
+          <p class="q-body">成长本质上是反人性的：控制饮食、锻炼身体、学习新技能、独立思考、克制欲望、戒除成瘾、无视评价。这些都要对抗本能，放弃即时满足，选择短期痛苦换取长期价值。<strong>顺应人性会很舒适，克服人性才会变强。</strong></p>
+          <p class="q-note"><b>编者按</b>　这条的正确性有边界：它适用于<strong>你已经选定、且必须亲自完成的事</strong>。用它去对抗一个本可以换掉的环境，是浪费。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #59 · #67</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="10">
+        <div class="q-no">52</div>
+        <div>
+          <p class="q-body">要想做成一件事，它必须让你觉得<strong>习以为常</strong>，像每天吃饭一样自然。如果每次都要靠闹钟或外力督促，那这件事你就做不成。<strong>如果你觉得自己很努力，说明你还没到这个程度。</strong></p>
+          <p class="q-note"><b>编者按</b>　这句"如果你觉得努力，说明还没到"乍听刻薄，但它有机制支撑：需要持续消耗意志力的行为无法长期维持，自动化之后才谈得上积累。<strong>它与上一条构成了完整链条——先靠反人性起步，再靠习惯化维持。</strong></p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #48</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="10">
+        <div class="q-no">53</div>
+        <div>
+          <p class="q-body">有个词叫<strong>生产性逃避</strong>：当你需要面对最重要、最有压力的事时，反而会转去做另一件同样合理、但压力更小的事。看起来很忙，实际在逃避真正的问题。<strong>最后，惦记这些事的心理负担，会远远超过做它们的痛苦。</strong></p>
+          <p class="q-note"><b>编者按</b>　这是一个有正式研究支撑的概念（回避型拖延），也是全稿里最能解释"我明明很忙却没进展"的一条。识别方法是问：这件事是我最该做的，还是我最不害怕做的。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #61</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="10">
+        <div class="q-no">54</div>
+        <div>
+          <p class="q-body">你每天喂给大脑的东西，正在缓慢地塑造你。你思考什么决定你关注什么，关注什么决定你采取什么行动。<strong>你喂养焦虑，焦虑就成了底色；你追求短期刺激，就会被刺激反过来控制。</strong></p>
+          <p class="q-note"><b>编者按</b>　原文说这是"人类历史上最伟大的发现"，并把它挂在一个查不到出处的名人名下（见验伪表）。观点保留：这是注意力经济时代最需要的一条自我管理原则。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #106 · #62</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="10">
+        <div class="q-no">55</div>
+        <div>
+          <p class="q-body">学生思维是迎难而上、非黑即白、先学后做、寻找标准答案、完成既定任务。<strong>而现实世界的解法是配置资源、顺势而为、权衡利弊、先做后学、理解概率。</strong></p>
+          <p class="q-note"><b>编者按</b>　不是要你丢掉前者，而是要按场景切换：考试用学生思维，人生用后者。原文的对照表有用，但它把"社会思维"写得过于功利，我删掉了其中"算计"的部分。</p>
+          <div class="q-meta"><span class="tag exp">经验规律</span><span class="tag src">原 #126</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 11 意义 ══════════ -->
+<section class="chapter" id="c11" data-ch="11">
+  <div class="wrap">
+    <div class="ch-head rv">
+      <div class="ch-num">11</div>
+      <div>
+        <div class="ch-title"><small>MEANING</small>意义：由自己签发，所以不必宏大</div>
+        <p class="ch-def">原文在这里有个漂亮的自我完成：先说人生没有意义，再说意义只能自己造。这两句不是矛盾，是同一个推论的两半。</p>
+      </div>
+    </div>
+    <div class="qs">
+      <article class="q rv" data-ch="11">
+        <div class="q-no">56</div>
+        <div>
+          <p class="q-body">我们大多数人一生都是没有意义的。百年之后，存在过的所有痕迹都会消失、被遗忘。<strong>人生就是你活着时的体验</strong>——别让那些不开心的事占据一生。面子、关系、工作压力、别人的眼光，放到漫长的时间里看，其实都不重要。</p>
+          <p class="q-note"><b>编者按</b>　"没有意义"这个结论容易被误读成虚无。它的实际用途是<strong>做减法</strong>：既然最终都不重要，那就不必为不重要的东西付费。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #47 · #169 · #206</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="11">
+        <div class="q-no">57</div>
+        <div>
+          <p class="q-body">你的人生，只要对你自己有意义就足够了。<strong>生命最大的意义，就是"我愿意"。</strong>对着雨天发呆、看一部喜欢的电影、午后散步、打一局游戏——这些在世俗眼里虚度光阴的事，构成了你生命中最真实的体验。</p>
+          <p class="q-note"><b>编者按</b>　"我愿意"三个字是全稿最好的一句总结。它不提供答案，它提供了<strong>判定权归属</strong>——这比任何答案都更有用。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #80 · #52 · #136</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="11">
+        <div class="q-no">58</div>
+        <div>
+          <p class="q-body">人生最大的成就，是<strong>把自己塑造成一个完整的人</strong>：建立完整的价值观，确立原则与底线，培养独立人格，拥有健康的身体、稳定的内核，找到自己的方向。这一切都要靠不断摸索、实践、修正，一点点亲手雕刻。</p>
+          <p class="q-note"><b>编者按</b>　这条与"人生无意义"表面冲突，其实是它的下半句：宇宙不签发意义，所以这件事只能你自己做——<strong>塑造自己，就是那件"我愿意"的事的具体形态</strong>。</p>
+          <div class="q-meta"><span class="tag val">价值主张</span><span class="tag src">原 #63 · #99</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="11">
+        <div class="q-no">59</div>
+        <div>
+          <p class="q-body">越早意识到越好的一件事：<strong>你并没有一条现成的人生主线。</strong>过去推动你前进的，是外界定义、社会标准、父母认知的上限、公司拆解的目标。你做了很多事，获得了很多，却发现那不是你最想要的。</p>
+          <p class="q-note"><b>编者按</b>　这条提供了一个有价值的自查："我现在追的东西，是谁定的？"答案如果一直指向别人，那主线就还没开始。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #99</span></div>
+        </div>
+      </article>
+      <article class="q rv" data-ch="11">
+        <div class="q-no">60</div>
+        <div>
+          <p class="q-body">想象多年以后，你垂垂老矣，坐在公园长椅上晒太阳，回忆这一生。<strong>那时你不会后悔没好好读书、没努力工作、投资亏了钱。你只会后悔没有尽可能多地体验快乐</strong>，没有多吃几次好吃的，没有看喜欢的风景，没有去遍想去的地方。</p>
+          <p class="q-note"><b>编者按</b>　"终局视角"是一个能立刻使用的思维工具：把当下的事放到生命末端去看，绝大多数焦虑会自动降级。这是我认为整份稿子最适合收尾的一条。</p>
+          <div class="q-meta"><span class="tag mech">机制清晰</span><span class="tag src">原 #188 · #65</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 验伪 ══════════ -->
+<section id="audit" class="rv">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">12</span>
+      <h2>引语验伪：16 处署名的真实性</h2>
+      <p>原稿引了 16 位名人。其中 6 处属于网络流传的伪托——这不是原作者的疏忽，而是中文互联网上这些句子已经"长"在了名人名下。凡属伪托，我保留命题、撤掉署名：<strong>观点可以自己站住，不需要借一张脸。</strong></p>
+    </div>
+    <div class="audit">
+      <div class="arow">
+        <div class="q-txt">"如果你希望自己比别人更幸福，这就很难了，因为我们总是高估别人的幸福。"<span>原稿署：孟德斯鸠</span></div>
+        <div class="verdict">孟德斯鸠全集与《论法的精神》中均无此语。这是中文互联网上流传最广的伪托之一，通常配在"攀比偷走幸福"的文章开头。</div>
+        <div class="cell"><span class="flag f-fake">查无实据</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"费斯汀格法则：人生 10% 由发生在你身上的事决定，90% 由你的反应决定。"<span>原稿署：心理学</span></div>
+        <div class="verdict">费斯汀格的真实贡献是<strong>认知失调理论</strong>，从未提出过"10/90 法则"。这是励志培训里最常见的伪造理论之一。</div>
+        <div class="cell"><span class="flag f-fake">伪造理论</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"在熟悉的痛苦和未知的恐惧之间，人们往往会选择前者。"<span>原稿署：卡尔·荣格</span></div>
+        <div class="verdict">荣格全集检索不到。这类"荣格语录"多为后人伪托，同批流传的还有"直到你把无意识变为意识，它将主宰你的人生"等。观点可用，署名不可用。</div>
+        <div class="cell"><span class="flag f-fake">查无实据</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"人生实际上没有任何价值……宇宙只是无尽的飘渺和虚无，也不会承认人类所谓价值。"<span>原稿署：加缪</span></div>
+        <div class="verdict">加缪的荒诞哲学恰恰反对"虚无即结论"——他主张的是<strong>在无意义中反抗</strong>。这段文字的措辞与思辨方式都不像加缪，属典型中文伪托。</div>
+        <div class="cell"><span class="flag f-fake">风格不符</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"如果一味担心目的地没有停车位，就提前把车停在别处。"<span>原稿署：哈佛大学前校长</span></div>
+        <div class="verdict">"哈佛前校长"是中文鸡汤里的万能署名（还有"哈佛校长开学演讲"系列）。无人名、无演讲时间、无出处，属编造故事。</div>
+        <div class="cell"><span class="flag f-fake">万能署名</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"追求平静是一种比追求幸福更合理的野心。"<span>原稿署：博尔赫斯</span></div>
+        <div class="verdict">博尔赫斯访谈与随笔中查不到对应表述。语气接近，但无可核出处。<strong>观点我保留了，署名撤掉。</strong></div>
+        <div class="cell"><span class="flag f-fake">查无实据</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"前 50 次都很痛苦，但当你习惯以后，就能更好地参加下一次游戏。"<span>原稿署：马斯克</span></div>
+        <div class="verdict">大意与马斯克谈创业承受力的表述接近，但"前 50 次"这个具体说法找不到原始出处。归入"大意可信、字句待考"。</div>
+        <div class="cell"><span class="flag f-half">字句待考</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"You'll never be ready."<span>原稿署：蒂姆·库克</span></div>
+        <div class="verdict">库克在多次演讲中表达过"不存在准备好的那天"的意思，但这句英文的准确出处无法定位。意思可信，不宜当作原话引用。</div>
+        <div class="cell"><span class="flag f-half">字句待考</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"真正有效率的劳动者，不会整天马不停蹄地工作。"<span>原稿署：梭罗</span></div>
+        <div class="verdict">梭罗确实批评过无意义的忙碌，但这句译文的对应原文无法确定。属"思想可信、引文存疑"。</div>
+        <div class="cell"><span class="flag f-half">字句待考</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"你的语言，就是你世界的边界。"<span>原稿署：维特根斯坦</span></div>
+        <div class="verdict"><strong>真实。</strong>出自《逻辑哲学论》5.6："我的语言的界限意味着我的世界的界限。"中译有出入，命题无误。</div>
+        <div class="cell"><span class="flag f-real">出处确凿</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"认识你自己。"<span>原稿署：苏格拉底</span></div>
+        <div class="verdict"><strong>真实。</strong>原为德尔菲阿波罗神庙铭文，苏格拉底将其作为哲学起点反复引用。署名苏格拉底是通行做法。</div>
+        <div class="cell"><span class="flag f-real">出处确凿</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"愚蠢、自私、身体好，是幸福的三要素，不过最重要的还是愚蠢。"<span>原稿署：福楼拜</span></div>
+        <div class="verdict"><strong>真实。</strong>出自福楼拜书信（1857 年前后致友人）。这条是真的，而且比它看起来更刻薄——福楼拜本人并不快乐。</div>
+        <div class="cell"><span class="flag f-real">出处确凿</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"这世上只有一种英雄主义，就是看清生活的真相之后依然热爱它。"<span>原稿署：罗曼·罗兰</span></div>
+        <div class="verdict"><strong>真实。</strong>出自《米开朗琪罗传》序言。注意常被误作"世界上只有一种真正的英雄主义"的变体，意思一致。</div>
+        <div class="cell"><span class="flag f-real">出处确凿</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"思考是最艰苦的工作，这就是为什么很少有人愿意从事它。"<span>原稿署：亨利·福特</span></div>
+        <div class="verdict"><strong>真实。</strong>福特多次公开表达过此意，版本略有差异（"Thinking is the hardest work there is, which is probably the reason why so few engage in it"）。</div>
+        <div class="cell"><span class="flag f-real">出处确凿</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"闲暇才是人生的精华，除此之外，人的一生不过是辛苦和劳作。"<span>原稿署：叔本华</span></div>
+        <div class="verdict"><strong>真实。</strong>《人生的智慧》论"闲暇"一节，叔本华将闲暇视为人生的最高财富。意思准确。</div>
+        <div class="cell"><span class="flag f-real">出处确凿</span></div>
+      </div>
+      <div class="arow">
+        <div class="q-txt">"人类历史上最伟大的发现，就是你大部分时间在想什么，你就会成为什么样的人。"<span>原稿：无名（常被挂在威廉·詹姆斯名下）</span></div>
+        <div class="verdict">威廉·詹姆斯有"改变态度即改变人生"的相近表述，但没有"人类历史上最伟大的发现"这层包装。这句话本身是励志演讲的产物，不是学术发现。</div>
+        <div class="cell"><span class="flag f-half">包装夸大</span></div>
+      </div>
+    </div>
+    <p style="margin-top:26px;font-size:13px;color:var(--muted);line-height:1.9">
+      附：还有一类不可核实的表述——"我观察过身边所有事业有成的人""一个诺贝尔奖得主曾说"。这类<strong>第一人称权威叙事</strong>无法验证，也无法反驳。
+      我在收录时统一删掉了"我观察过""我发现"这类开场，只保留命题本身：如果一个判断成立，它不需要作者的身份来担保。
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ 剔除 ══════════ -->
+<section id="cut" class="rv" style="background:rgba(255,253,248,.55);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">13</span>
+      <h2>剔除：35 条为什么不要</h2>
+      <p>这一节是整份整理里最有用的部分——<strong>知道什么该扔掉，比多背几条金句更值钱。</strong>每条只给一句理由，理由的类别集中在五种：伪引用、绝对化、幸存者偏差、玄学与刻板印象、有害归因。</p>
+    </div>
+    <div class="cutlist">
+      <div class="cutcard"><div class="cw"><span class="cno">#8</span><span class="ct">未来世界只属于两类人：扎进科技的，和回归内心的</span></div><div class="cr"><b>空泛预言</b>无法证伪，也无法指导今天做任何决定。这类二元预言是语录体的典型填充物。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#21</span><span class="ct">极度渴望成功的人，其实已经无限接近成功</span></div><div class="cr"><b>逻辑谬误</b>渴望是必要条件，不是充分条件。把"想做"说成"快成了"，是最容易让人误判进度的一句话。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#28</span><span class="ct">做不愿做的是改变，做没做过的是成长，做办不到的是挑战…</span></div><div class="cr"><b>排比空话</b>四个短句互相定义，信息量为零。删掉之后损失为零。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#34</span><span class="ct">真正有智慧的人，人前话很少，但每个字都不是废话…</span></div><div class="cr"><b>理想化素描</b>罗列八条美德，没有一条可观察、可学习。读完之后你不知道该做什么。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#50</span><span class="ct">哈佛大学前校长：不要因为担心没停车位就提前停车</span></div><div class="cr"><b>伪引用</b>故事本身是好比喻，但署名编造。观点已并入第五章"别提前退而求其次"。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#53</span><span class="ct">精神层级越高的人，在世俗就越格格不入，烦恼痛苦难以摆脱</span></div><div class="cr"><b>浪漫化痛苦</b>把痛苦包装成精神层级高的证明，会让正在低落的人拒绝求助。没有任何证据支持这个排序。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#60</span><span class="ct">成大事的人，很多都有童年被忽视、被孤立的经历</span></div><div class="cr"><b>幸存者偏差</b>只统计了成功者，没统计同样经历却未成功的绝大多数。这是全文最典型的取样错误。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#72</span><span class="ct">你以为自己在想念某个人，其实你只是刚好在那个时刻感到失落</span></div><div class="cr"><b>过度归因</b>把一种复杂情感一口断定成情绪错位。文学上漂亮，作为结论是武断的。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#74</span><span class="ct">如果孤独让你享受，那你一定是个心狠且内心强大的人</span></div><div class="cr"><b>浪漫化偏执</b>把"察觉他人恶意"当成强大的标志，实际是偏执倾向的典型描述。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#75</span><span class="ct">世俗成功能给你不再被说教的自由，结婚生子是最简单的</span></div><div class="cr"><b>贬低他人选择</b>用"最简单"定义别人的婚姻与生育，是把自己的价值排序当成客观高低。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#87</span><span class="ct">男人最顶级的魅力是自信、勇敢、理性、情绪稳定</span></div><div class="cr"><b>性别刻板</b>这些品质与性别无关。同段内容去性别化后已在第八、九章收录。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#88</span><span class="ct">如果一个人有强烈意愿做成某事，他一定具备做成这件事的能力</span></div><div class="cr"><b>循环论证</b>把"没做成"反推为"意愿不够强"，这个逻辑可以解释一切，因此什么也解释不了。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#101</span><span class="ct">任何寻求安慰的行为都不会让你成长，宿醉、痛哭、倾诉都一样</span></div><div class="cr"><b>与证据相悖</b>社会支持是心理健康最稳定的保护因素之一。把倾诉贬为无效，是一种有害的硬汉叙事。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#105</span><span class="ct">世俗的道路，是一场注定失败的道路</span></div><div class="cr"><b>绝对化</b>"注定"两个字抹掉了全部个案。同一件事在第一章还被说成"身体好就能长期胜出"。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#107</span><span class="ct">谁觉得你是好人，你就在他面前做好人；谁觉得你是坏人，你就放开做坏人</span></div><div class="cr"><b>不可执行</b>听起来很爽，实际是把行为标准交给别人的判断。真按这条活，最先崩的是自己。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#114</span><span class="ct">极其沉稳平静、知识面广却不合群的人，大概率阅历丰富精神境界高</span></div><div class="cr"><b>刻板推断</b>同样的外在表现，也可能是社交焦虑或回避。用气质反推境界，是不成立的推理。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#117</span><span class="ct">穷人最大的误区是以为赚更多钱才能自由，其实是先自由了才能赚钱</span></div><div class="cr"><b>因果倒置</b>自由与收入互为因果，原文只取了对自己叙事有利的一半，且无法验证。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#134</span><span class="ct">真正能发达的人，年轻时都经历过漫长的迷茫和焦虑</span></div><div class="cr"><b>幸存者叙述</b>迷茫的人极多，发达的人极少。前者是后者的必要条件，不构成任何指引。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#158</span><span class="ct">命运是有伏笔的，你会成为你曾经羡慕的那类人</span></div><div class="cr"><b>宿命论</b>把事后叙事包装成事前规律。所有"命运伏笔"的故事都是回头看才成立的。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#163</span><span class="ct">能爬到金字塔顶端的人，无一例外都是理性到极致的利己主义者</span></div><div class="cr"><b>无证据的普遍断言</b>"无一例外"是最容易证伪的句式，而原文没有给任何一个可核查的样本。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#166</span><span class="ct">看一个人每天洗头、牙齿洁白、身材紧致，就能判断他的阶层</span></div><div class="cr"><b>以貌取人</b>把外在打理直接换算成阶层与"对明天的乐观"，中间跳过了太多变量（疾病、遗传、职业）。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#167</span><span class="ct">穷人思维 vs 富人思维对照表</span></div><div class="cr"><b>道德污名</b>把"痛恨社会不公"列为穷人思维，等于把结构性困境归因于个人品格。这是"思维决定论"的典型话术。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#179</span><span class="ct">底层家庭出身的人，成熟其实更晚，对人性洞悉更晚</span></div><div class="cr"><b>阶层决定论</b>与"穷人的孩子早当家"这句常识正面冲突，而原文对两者都没给证据。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#180</span><span class="ct">螃蟹效应：所以和周围人搞好关系的秘诀是不分享喜悦、不炫耀成功</span></div><div class="cr"><b>默认敌意</b>效应本身是个比喻，但推出的策略（永远低调、假装糊涂）会让人丧失真实连接。代价远大于收益。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#183</span><span class="ct">命好的人脸上不带苦相，眉头不皱、状态松弛、嘴上有德</span></div><div class="cr"><b>玄学面相</b>把"命好"和面部状态挂钩，属于看相范畴。后半段的处世建议在别处已有更好的版本。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#187</span><span class="ct">看起来沉默寡言、傻乎乎的人，深入了解后往往读过很多书、境界极高</span></div><div class="cr"><b>刻板推断</b>与 #114 同源：用外在气质反推内在境界。这类句子唯一的功能是给内向者提供情绪安慰。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#190</span><span class="ct">外表柔和但内心杀伐果断，为达目的可以不择手段，这种人成功只是迟早的事</span></div><div class="cr"><b>美化伤害</b>"不择手段"被当作成功的必要条件来赞美。这是全文最应该删掉的一条。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#196</span><span class="ct">算命摊流传：官问刑，富问灾，平头百姓问发财</span></div><div class="cr"><b>玄学语境</b>作为社会观察有点意思，但落不到任何行动上，且原文自己承认这是算命摊的话。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#202</span><span class="ct">所有成功人士中没有一个老好人，善良的人把精力耗在无用的人际关系上</span></div><div class="cr"><b>有害归因</b>"善良导致底层"是一个既不成立又危险的结论：它给冷漠提供了道德许可。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#209</span><span class="ct">能成大事的人：极度平静、极度自我认可、不迎合、不炫耀、长期看书健身…</span></div><div class="cr"><b>口号堆叠</b>八条形容词并列，没有因果、没有取舍、没有起点。属于典型的"语录体收尾"。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#132</span><span class="ct">费斯汀格法则：人生 10% 是发生在你身上的事，90% 是你的反应</span></div><div class="cr"><b>伪造理论</b>费斯汀格研究的是认知失调。此法则无任何学术来源，属培训行业自造。观点已并入当下章。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#165</span><span class="ct">荣格说：在熟悉的痛苦和未知的恐惧之间，人们往往选择前者</span></div><div class="cr"><b>伪引用</b>无可核出处。观点（人对熟悉感的依赖）本身成立，已在第六章以"筛选环境"的形态保留。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#200</span><span class="ct">加缪说人生实际上没有任何价值，宇宙不会承认人类所谓价值</span></div><div class="cr"><b>伪引用</b>措辞与加缪思想方式不符。加缪的落点是反抗，不是虚无。命题已在第十一章以更好版本收录。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#6</span><span class="ct">孟德斯鸠说：希望自己幸福很容易，希望比别人幸福就很难</span></div><div class="cr"><b>伪引用</b>全集无此语。而"攀比偷走幸福"这个观点，已用更干净的表述收入第八、十一章。</div></div>
+      <div class="cutcard"><div class="cw"><span class="cno">#85</span><span class="ct">上班才是最大的不良习惯，上班的目的就是为了以后不上班</span></div><div class="cr"><b>不可行</b>对绝大多数人是刚需。它真正有价值的部分（警惕时间被完全占满）已在第六章"筛选环境"里表达。</div></div>
+    </div>
+    <p style="margin-top:28px;font-size:13px;color:var(--muted);line-height:1.9">
+      另有一类没有列入上表：<strong>同义重复 115 条</strong>。它们不是错的，只是同一个意思换了几种说法——
+      "睡好觉"出现 7 次，"远离消耗你的人"出现 6 次，"别解释自己"出现 5 次，"人生是体验"出现 8 次。
+      重复本身说明作者真正在意什么，但重复不能当论证用。
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ 矛盾 ══════════ -->
+<section id="tension" class="rv">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">14</span>
+      <h2>三处自相矛盾，以及怎么处理</h2>
+      <p>原稿里有三组主张互相打架。直接读会觉得"好像都对，但没法同时执行"。这三组恰恰是最有价值的地方——<strong>矛盾不是错误，是还没有分层。</strong></p>
+    </div>
+
+    <div class="tension">
+      <div class="t-head"><span class="tn">矛盾一</span><h3>「别逼自己努力，去换环境」 vs 「成长本质是反人性」</h3></div>
+      <div class="t-body">
+        <div class="t-side">
+          <span class="lbl">第六章 · 原 #7</span>
+          <p>人不需要逼自己努力，更该做的是筛选环境。离开让你怀疑自我的地方，先获得自在，才有力气成长。</p>
+        </div>
+        <div class="t-side">
+          <span class="lbl">第十章 · 原 #59</span>
+          <p>成长本质上就是反人性：控制饮食、锻炼、学习、独立思考、克制欲望，都要对抗本能。</p>
+        </div>
+        <div class="t-res">
+          <b>调和</b>
+          两者管的是不同对象。凡是<strong>能更换的</strong>——工作、圈子、城市、关系——用"筛选"解决，别用意志力硬扛，那是把自律浪费在了错误的问题上。
+          凡是<strong>换不掉的</strong>——身体、技能、注意力、情绪反应——才需要"反人性"。
+          顺序也重要：先换场，再谈自律。在一个持续抽干你的地方练自律，练成的只是忍耐力。
+        </div>
+      </div>
+    </div>
+
+    <div class="tension">
+      <div class="t-head"><span class="tn">矛盾二</span><h3>「不要期待」 vs 「极度渴望」</h3></div>
+      <div class="t-body">
+        <div class="t-side">
+          <span class="lbl">原 #172</span>
+          <p>想要人生过得快乐，就记住两点：永不期待、戒掉敏感。对任何关系都不要过分探究别人的内心与本意。</p>
+        </div>
+        <div class="t-side">
+          <span class="lbl">原 #21</span>
+          <p>极度渴望成功的人，其实已经无限接近成功。动力不是逼出来的，是想出来的。</p>
+        </div>
+        <div class="t-res">
+          <b>调和</b>
+          关键在期待指向谁。指向<strong>他人行为</strong>的期待（他会回报我、他们会认可我）几乎必然落空，戒掉它是对的；
+          指向<strong>自己行动</strong>的渴望（我要做成这件事）是可执行的，越大越好。
+          "永不期待"这条我做了删改——它原文还包括"戒掉敏感"，而敏感本身是一种信息接收能力，问题不在于敏感，在于把接收到的信息过度解释。
+        </div>
+      </div>
+    </div>
+
+    <div class="tension">
+      <div class="t-head"><span class="tn">矛盾三</span><h3>「人生没有意义」 vs 「把自己塑造成完整的人」</h3></div>
+      <div class="t-body">
+        <div class="t-side">
+          <span class="lbl">原 #47 / #169</span>
+          <p>我们大多数人一生都是没有意义的，百年之后所有痕迹都会消失。人生的意义是什么，真的没那么重要。</p>
+        </div>
+        <div class="t-side">
+          <span class="lbl">原 #63</span>
+          <p>人生最伟大的成就，就是将自己塑造成一个完整的人：建立价值观，确立底线，培养独立人格。</p>
+        </div>
+        <div class="t-res">
+          <b>调和</b>
+          这不是矛盾，是同一个推论的两半——正因为宇宙不签发意义，意义才只能由自己造。<strong>"没有意义"是清空场地，"塑造自己"是在场地上盖房子。</strong>
+          原稿把这两句放在相隔几十条的位置，读起来像打架；放在一起，反而是全篇最完整的一段论证。
+        </div>
+      </div>
+    </div>
+
+    <div class="tension" style="margin-top:2px">
+      <div class="t-head"><span class="tn">补正</span><h3>还有三条，我只做了减法</h3></div>
+      <div class="t-body">
+        <div class="t-side">
+          <span class="lbl">被删掉的限定</span>
+          <p>原文说"痛苦时不要倾诉""只看结果不看情绪""任何动物都不靠善良活着"。这三条本身不算错，但把边界条件写丢了：倾诉是有效的（只是不能只倾诉）、结果导向适用于单次交易而非长期关系、攻击性是生命力但需要出口而非泛滥。</p>
+        </div>
+        <div class="t-side">
+          <span class="lbl">我为它们补的回</span>
+          <p>我在收录时给这三条各加了一句限定，写在"编者按"里。<strong>语录最大的问题不是错，是把有条件的结论说成无条件的。</strong>补上条件，它们才真的能用。</p>
+        </div>
+        <div class="t-res">
+          <b>一个可复用的检查</b>
+          读任何一条人生建议时，问它三个问题：这个结论在什么条件下不成立？说这话的人是不是只看到了赢家？照做之后，最坏的结果我能不能承担？
+          三条都过，再采纳。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════ 一页版 ══════════ -->
+<section id="action" class="act">
+  <div class="wrap">
+    <h2>如果只带走七条</h2>
+    <p class="sub">从 209 条里压缩到能背下来的长度。按重要度排序，最后一条是总纲。</p>
+    <ol>
+      <li><p>先修<strong>睡眠和身体</strong>。其他所有建议都建立在这上面——缺觉的人做不出任何一条。</p></li>
+      <li><p>遇到消耗你的环境，先<strong>换场</strong>，别急着练忍耐。自律要用在换不掉的事情上。</p></li>
+      <li><p>给自己造一套<strong>内部评价标准</strong>。别人的评价是信息，不是判决。</p></li>
+      <li><p><strong>小事务必立刻做</strong>，大事务必慢慢想。拖延真正偷走的是行动的信心，不是时间。</p></li>
+      <li><p>体验<strong>有保质期</strong>。想吃就吃，想去就去，别等条件齐备——条件不会齐备。</p></li>
+      <li><p>目标从"追求幸福"改成<strong>"追求平静"</strong>。前者靠外部事件，后者只靠内部秩序。</p></li>
+      <li><p>做重大选择时，用<strong>终局视角</strong>看一遍：八十岁的你坐在长椅上，会后悔什么？</p></li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>《语录的重量》· 209 条整理报告</span>
+    <span>原始 209 · 收录 60 · 剔除 35 · 合并 114</span>
+  </div>
+</footer>
+
+<script>
+/* 进度条 */
+const bar=document.querySelector('.progress i');
+addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;
+  bar.style.width=p+'%';
+},{passive:true});
+
+/* 数字滚动 */
+document.querySelectorAll('[data-to]').forEach(el=>{
+  const to=+el.dataset.to;
+  let cur=0,step=Math.ceil(to/40);
+  const t=setInterval(()=>{
+    cur+=step;
+    if(cur>=to){cur=to;clearInterval(t)}
+    el.textContent=cur;
+  },26);
+});
+
+/* 条形图：加载后逐行展开 */
+function drawBars(){
+  document.querySelectorAll('.bar i').forEach((b,i)=>{
+    setTimeout(()=>{b.style.width=(b.dataset.w||0)+'%'},120+i*55);
+  });
+}
+if(document.readyState==='loading'){addEventListener('DOMContentLoaded',drawBars)}else{drawBars()}
+
+/* 淡入 */
+const rvIo=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rvIo.unobserve(e.target)}});
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>rvIo.observe(el));
+
+/* 深色收尾区块：导航反色 */
+const actBox=document.querySelector('.act');
+if(actBox){
+  const darkCheck=()=>{
+    const r=actBox.getBoundingClientRect();
+    const mid=innerHeight*.55;
+    document.body.classList.toggle('on-dark',r.top<mid&&r.bottom>mid);
+  };
+  addEventListener('scroll',darkCheck,{passive:true});
+  darkCheck();
+}
+
+/* 侧栏高亮 */
+const links=[...document.querySelectorAll('.rail a')];
+const targets=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const spy=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));
+    }
+  });
+},{rootMargin:'-45% 0px -50% 0px'});
+targets.forEach(t=>spy.observe(t));
+
+/* 地形行跳转 */
+document.querySelectorAll('.row').forEach(r=>{
+  r.addEventListener('click',()=>{
+    const t=document.querySelector(r.dataset.go);
+    if(t){t.scrollIntoView({behavior:'smooth',block:'start'});t.querySelector('.q')?.scrollIntoView({behavior:'smooth',block:'center'})}
+  });
+});
+
+/* 搜索 + 筛选 */
+const q=document.getElementById('q');
+const chips=[...document.querySelectorAll('.chip')];
+const hint=document.getElementById('hint');
+const empty=document.getElementById('empty');
+const allQ=[...document.querySelectorAll('.q')];
+let filter='all';
+
+function apply(){
+  const kw=q.value.trim().toLowerCase();
+  let n=0;
+  allQ.forEach(card=>{
+    const okCh=filter==='all'||card.dataset.ch===filter;
+    const okKw=!kw||card.textContent.toLowerCase().includes(kw);
+    const show=okCh&&okKw;
+    card.classList.toggle('hide',!show);
+    if(show)n++;
+  });
+  hint.textContent=n+' 条';
+  empty.classList.toggle('on',n===0);
+  const filtering=!!kw||filter!=='all';
+  document.querySelectorAll('.chapter').forEach(ch=>{
+    const vis=[...ch.querySelectorAll('.q')].some(c=>!c.classList.contains('hide'));
+    ch.classList.toggle('hide',!vis&&filtering);
+  });
+  /* 筛选时收起附录，让结果集中 */
+  ['#audit','#cut','#tension'].forEach(s=>{
+    const el=document.querySelector(s);
+    if(el) el.classList.toggle('hide',filtering);
+  });
+}
+q.addEventListener('input',apply);
+chips.forEach(c=>c.addEventListener('click',()=>{
+  chips.forEach(x=>x.classList.remove('on'));
+  c.classList.add('on');
+  filter=c.dataset.f;
+  apply();
+  if(filter!=='all'){
+    const t=document.querySelector('#c'+filter);
+    if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}));
+</script>
+</body>
+</html>
